@@ -1,0 +1,12 @@
+.button {
+    -unity-font: url("project://database/Assets/Fonts/Sunny%20Spells.ttf?fileID=12800000&guid=b7d976dcc5960004cb8391a408031e8c&type=3#Sunny Spells");
+    -unity-font-definition: initial;
+    transition-duration: 0.33s;
+    scale: 1 1;
+    background-color: rgb(250, 95, 38);
+}
+
+.button:hover {
+    background-color: rgb(245, 143, 106);
+    scale: 1.1 1.1;
+}

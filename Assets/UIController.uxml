@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/style.uss?fileID=7433441132597879392&amp;guid=5bae953157b07e34687b0070fbc8e431&amp;type=3#style" />
+    <ui:VisualElement name="containerScreen" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Sunnyland/artwork/capa.png?fileID=21300000&amp;guid=65c676e19aa11cc45a4fa0560ed97218&amp;type=3#capa&quot;);">
+        <ui:VisualElement name="container" style="flex-grow: initial; height: 160px; width: 283px; justify-content: center; align-self: center; align-items: center; flex-wrap: nowrap; flex-shrink: 1; margin-top: 150px;">
+            <ui:Button text="JOGAR" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btnJogar" class="button" style="background-color: rgb(250, 95, 38); color: rgb(255, 255, 255); -unity-font-style: bold; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; width: 50%; -unity-background-image-tint-color: rgba(255, 255, 255, 0);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
