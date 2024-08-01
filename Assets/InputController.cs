@@ -169,6 +169,34 @@ public partial class @InputController: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UI"",
+            ""id"": ""20394d04-8d2c-48be-a249-2c8882f331f0"",
+            ""actions"": [
+                {
+                    ""name"": ""UIControls"",
+                    ""type"": ""Button"",
+                    ""id"": ""9090d32e-be8c-42b7-bd6b-cf3d8f3a0259"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""3fb88b28-2c8f-44de-9960-3c697ac6b7e3"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UIControls"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -177,6 +205,9 @@ public partial class @InputController: IInputActionCollection2, IDisposable
         m_Jogador = asset.FindActionMap("Jogador", throwIfNotFound: true);
         m_Jogador_Movimento = m_Jogador.FindAction("Movimento", throwIfNotFound: true);
         m_Jogador_Pular = m_Jogador.FindAction("Pular", throwIfNotFound: true);
+        // UI
+        m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+        m_UI_UIControls = m_UI.FindAction("UIControls", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -288,9 +319,59 @@ public partial class @InputController: IInputActionCollection2, IDisposable
         }
     }
     public JogadorActions @Jogador => new JogadorActions(this);
+
+    // UI
+    private readonly InputActionMap m_UI;
+    private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
+    private readonly InputAction m_UI_UIControls;
+    public struct UIActions
+    {
+        private @InputController m_Wrapper;
+        public UIActions(@InputController wrapper) { m_Wrapper = wrapper; }
+        public InputAction @UIControls => m_Wrapper.m_UI_UIControls;
+        public InputActionMap Get() { return m_Wrapper.m_UI; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
+        public void AddCallbacks(IUIActions instance)
+        {
+            if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
+            @UIControls.started += instance.OnUIControls;
+            @UIControls.performed += instance.OnUIControls;
+            @UIControls.canceled += instance.OnUIControls;
+        }
+
+        private void UnregisterCallbacks(IUIActions instance)
+        {
+            @UIControls.started -= instance.OnUIControls;
+            @UIControls.performed -= instance.OnUIControls;
+            @UIControls.canceled -= instance.OnUIControls;
+        }
+
+        public void RemoveCallbacks(IUIActions instance)
+        {
+            if (m_Wrapper.m_UIActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IUIActions instance)
+        {
+            foreach (var item in m_Wrapper.m_UIActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_UIActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public UIActions @UI => new UIActions(this);
     public interface IJogadorActions
     {
         void OnMovimento(InputAction.CallbackContext context);
         void OnPular(InputAction.CallbackContext context);
+    }
+    public interface IUIActions
+    {
+        void OnUIControls(InputAction.CallbackContext context);
     }
 }
